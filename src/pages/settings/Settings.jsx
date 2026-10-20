@@ -604,7 +604,7 @@ function Settings() {
                     <div style={{ color: theme === "light" ? "var(--primary-blue, #ea580c)" : "var(--text-muted, #64748b)" }}>
                       <SunIcon />
                     </div>
-                    <strong style={{ fontSize: "14px", color: "var(--text-primary, #0f172a)" }}>Light Mode</strong>
+                    <strong style={{ fontSize: "14px", color: "var(--text-primary, #0f172a)" }}>Light Mode (Default)</strong>
                     {theme === "light" && (
                       <span style={{ marginLeft: "auto", fontSize: "10px", fontWeight: "700", color: "#15803d", background: "#f0fdf4", padding: "1px 6px", borderRadius: "4px" }}>Active</span>
                     )}

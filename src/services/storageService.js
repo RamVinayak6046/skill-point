@@ -1132,17 +1132,18 @@ export const importData = (data, userId = null) => {
 
 /**
  * Retrieves the saved theme preference ('light', 'dark', or 'system')
+ * Defaults to 'light' mode.
  */
 export const getThemePreference = () => {
-  if (typeof window === 'undefined') return 'system';
+  if (typeof window === 'undefined') return 'light';
   try {
     const saved = window.localStorage.getItem(KEYS.THEME);
     if (saved === 'light' || saved === 'dark' || saved === 'system') {
       return saved;
     }
-    return 'system';
+    return 'light';
   } catch {
-    return 'system';
+    return 'light';
   }
 };
 
@@ -1150,7 +1151,7 @@ export const getThemePreference = () => {
  * Saves and applies theme preference
  */
 export const saveThemePreference = (theme) => {
-  const validTheme = theme === 'light' || theme === 'dark' ? theme : 'system';
+  const validTheme = theme === 'dark' || theme === 'system' ? theme : 'light';
   if (typeof window !== 'undefined') {
     try {
       window.localStorage.setItem(KEYS.THEME, validTheme);
@@ -1186,7 +1187,7 @@ export const applyTheme = (theme) => {
 
   const metaThemeColor = document.querySelector('meta[name="theme-color"]');
   if (metaThemeColor) {
-    metaThemeColor.setAttribute('content', resolvedMode === 'dark' ? '#0b0f17' : '#0f172a');
+    metaThemeColor.setAttribute('content', resolvedMode === 'dark' ? '#0b0f17' : '#ffffff');
   }
 
   return resolvedMode;

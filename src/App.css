@@ -15911,8 +15911,8 @@ html[data-theme="dark"] {
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]):not([data-color-mode="light"]),
-  html:not([data-theme="light"]):not([data-color-mode="light"]) {
+  :root[data-theme="system"]:not([data-color-mode="light"]),
+  html[data-theme="system"]:not([data-color-mode="light"]) {
     color-scheme: dark;
 
     --bg-main: #0b0f17;
