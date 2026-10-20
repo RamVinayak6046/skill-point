@@ -1,0 +1,22 @@
+name = "skill-point-ai-worker"
+main = "src/index.js"
+compatibility_date = "2024-09-23"
+
+# Cloudflare Workers AI Binding (Free Tier access to serverless AI models)
+[ai]
+binding = "AI"
+
+# Cloudflare KV Namespace for Trusted Assessment Sessions
+[[kv_namespaces]]
+binding = "SESSIONS_KV"
+id = "dc90b35d1a7a480f935f2ea4236b560b"
+
+# Cloudflare D1 Database for Atomic Daily Quota Accounting (Free Tier: 5M reads/day, 100k writes/day, 5GB storage)
+[[d1_databases]]
+binding = "DB"
+database_name = "skill_point_db"
+database_id = "6a5f1714-bc49-4aff-9d3a-d2f58dfa8f90"
+
+[vars]
+ENVIRONMENT = "production"
+MAX_DAILY_REQUESTS = "100"
