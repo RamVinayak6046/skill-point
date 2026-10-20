@@ -49,10 +49,10 @@ const Login = () => {
   };
 
   return (
-    <div style={styles.page}>
-      <div style={styles.card}>
+    <div className="sp-auth-page" style={styles.page}>
+      <div className="sp-auth-card" style={styles.card}>
         {/* Left Panel: Platform Architecture & Identity */}
-        <div style={styles.panel}>
+        <div className="sp-auth-panel" style={styles.panel}>
           <div style={styles.panelContent}>
             <div style={styles.brandRow}>
               <div style={styles.brandMark}>SP</div>
@@ -109,10 +109,10 @@ const Login = () => {
         </div>
 
         {/* Right Panel: Sign-In Form */}
-        <div style={styles.formContainer}>
+        <div className="sp-auth-form-container" style={styles.formContainer}>
           <div style={styles.formHeader}>
             <h2 style={styles.title}>Sign In</h2>
-            <p style={styles.subtitle}>Enter your account credentials to access your persistent readiness dashboard.</p>
+            <p className="sp-auth-subtitle" style={styles.subtitle}>Enter your account credentials to access your persistent readiness dashboard.</p>
           </div>
 
           {error && (

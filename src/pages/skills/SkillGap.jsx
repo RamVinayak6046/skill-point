@@ -505,7 +505,7 @@ function SkillGap() {
             <h2 style={{ fontSize: "19px", color: "#0f172a", margin: "0 0 6px", fontWeight: "800" }}>
               Latest Skill Status & {remainingWeakSkills.length} Remaining Deficit{remainingWeakSkills.length === 1 ? "" : "s"}
             </h2>
-            <p style={{ margin: 0, fontSize: "13px", color: "#475569", maxWidth: "780px", lineHeight: "1.5" }}>
+            <p className="skill-status-helper" style={{ margin: 0, fontSize: "13px", color: "#475569", maxWidth: "780px", lineHeight: "1.5" }}>
               {latestAssessment
                 ? `Last evaluated in Level ${latestAssessment.level || 1} Assessment (${latestAssessment.score}%) with ${assessmentHistory.length} total attempt(s) preserved. Below are the top target skills requiring reinforcement.`
                 : "No assessment attempts completed yet. Take an adaptive evaluation to establish your verified competency benchmarks."}
@@ -703,6 +703,7 @@ function SkillGap() {
               >
                 {/* Main Row */}
                 <div
+                  className="skill-row-grid"
                   style={{
                     display: "grid",
                     gridTemplateColumns: "1.4fr 1.3fr 1.8fr 0.6fr 0.7fr 0.8fr",

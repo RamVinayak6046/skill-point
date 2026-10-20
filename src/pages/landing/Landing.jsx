@@ -548,6 +548,58 @@ const Landing = () => {
             grid-template-columns: 1fr;
           }
         }
+
+        @media (max-width: 640px) {
+          .landing-hero {
+            padding: 2.25rem 5%;
+            gap: 2rem;
+          }
+          .landing-hero-content h1 {
+            font-size: clamp(1.65rem, 6.5vw, 2.25rem);
+            overflow-wrap: break-word;
+            word-break: break-word;
+          }
+          .landing-framework-card {
+            padding: 1.25rem 1rem;
+          }
+          .landing-features,
+          .landing-steps {
+            padding: 3rem 5%;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .landing-nav {
+            padding: 1rem 4%;
+            gap: 0.5rem;
+          }
+          .landing-nav-actions {
+            gap: 0.5rem;
+          }
+          .landing-btn-login {
+            font-size: 0.8125rem;
+          }
+          .landing-btn-primary,
+          .landing-btn-secondary {
+            padding: 0.5rem 0.875rem;
+            font-size: 0.8125rem;
+          }
+          .landing-hero-actions {
+            flex-direction: column;
+            width: 100%;
+          }
+          .landing-hero-actions a {
+            width: 100%;
+            justify-content: center;
+            box-sizing: border-box;
+          }
+          .landing-footer {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 2rem 4%;
+          }
+        }
       `}</style>
 
       {/* Navigation Bar */}

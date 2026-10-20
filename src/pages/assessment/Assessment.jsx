@@ -803,7 +803,7 @@ function Assessment() {
                 <h3 style={{ margin: "4px 0 0", fontSize: "18px", color: "#1c1208" }}>
                   Skill-Wise Changes & Verified Progression
                 </h3>
-                <p style={{ margin: "4px 0 0", fontSize: "12px", color: "#8a7966" }}>
+                <p className="delta-analysis-helper" style={{ margin: "4px 0 0", fontSize: "12px", color: "#8a7966" }}>
                   Comparison of tested competencies between previous attempt and current assessment.
                 </p>
               </div>

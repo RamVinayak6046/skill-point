@@ -61,10 +61,10 @@ const Register = () => {
   };
 
   return (
-    <div style={styles.page}>
-      <div style={styles.card}>
+    <div className="sp-auth-page" style={styles.page}>
+      <div className="sp-auth-card" style={styles.card}>
         {/* Left Side: Brand Panel */}
-        <div style={styles.panel}>
+        <div className="sp-auth-panel" style={styles.panel}>
           <div style={styles.panelContent}>
             <div style={styles.brandRow}>
               <div style={styles.brandMark}>SP</div>
@@ -121,10 +121,10 @@ const Register = () => {
         </div>
 
         {/* Right Side: Register Form */}
-        <div style={styles.formContainer}>
+        <div className="sp-auth-form-container" style={styles.formContainer}>
           <div style={styles.formHeader}>
             <h2 style={styles.title}>Create Account</h2>
-            <p style={styles.subtitle}>Create your profile to start tracking your job readiness scores.</p>
+            <p className="sp-auth-subtitle" style={styles.subtitle}>Create your profile to start tracking your job readiness scores.</p>
           </div>
 
           {error && (

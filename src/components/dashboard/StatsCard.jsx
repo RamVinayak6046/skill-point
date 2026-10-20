@@ -24,7 +24,7 @@ function StatsCard({ label, value, description }) {
 
   return (
     <div
-      className="stats-card"
+      className={`stats-card stat-${label.toLowerCase().replace(/\s+/g, '-')}`}
       style={{
         position: "relative",
         background: "#ffffff",
@@ -42,6 +42,7 @@ function StatsCard({ label, value, description }) {
       {/* Top Header: Eyebrow Label with Minimalist Accent Pill */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <span
+          className="stats-card-label"
           style={{
             fontSize: "11px",
             fontWeight: "700",
@@ -65,6 +66,7 @@ function StatsCard({ label, value, description }) {
 
       {/* Primary Tabular Metric */}
       <div
+        className="stats-card-value"
         style={{
           fontSize: "30px",
           fontWeight: "800",
@@ -80,6 +82,7 @@ function StatsCard({ label, value, description }) {
 
       {/* Supporting Micro-Context */}
       <div
+        className="stats-card-desc"
         style={{
           fontSize: "12px",
           fontWeight: "500",

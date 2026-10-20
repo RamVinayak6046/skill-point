@@ -1663,42 +1663,12 @@ button {
 
 
 /* =========================================
-   MOBILE SIDEBAR
+   MOBILE SIDEBAR (handled by mobile drawer system)
 ========================================= */
 
 @media (max-width: 850px) {
-
-  .sidebar {
-    width: 70px;
-
-    padding: 20px 10px;
-  }
-
-  .logo {
-    justify-content: center;
-
-    padding: 0 0 22px;
-  }
-
-  .logo-text,
-  .nav-section,
-  .nav-label,
-  .sidebar-bottom {
-    display: none;
-  }
-
-  .nav-item {
-    justify-content: center;
-
-    padding: 12px;
-  }
-
-  .nav-icon {
-    font-size: 18px;
-  }
-
   .app-content {
-    margin-left: 70px;
+    margin-left: 0;
   }
 }
 
@@ -1817,6 +1787,10 @@ button {
   align-items: center;
   gap: 12px;
   flex-shrink: 0;
+}
+
+.target-job-btn-group {
+  display: contents;
 }
 
 .target-status {
@@ -9624,12 +9598,6 @@ button {
   .main-content {
     margin-left: 0;
   }
-
-  .sidebar {
-    position: relative;
-    width: 100%;
-    min-height: auto;
-  }
 }
 
 @media (max-width: 700px) {
@@ -14015,10 +13983,19 @@ body, html {
   }
 
   .sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    height: 100vh !important;
+    height: 100dvh !important;
     transform: translateX(-100%) !important;
-    width: 270px !important;
+    width: 280px !important;
+    max-width: 85vw !important;
     z-index: 1000 !important;
     box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   .sidebar.mobile-open {
@@ -14040,7 +14017,7 @@ body, html {
   .main-content {
     margin-left: 0 !important;
     width: 100% !important;
-    padding-top: 56px !important;
+    padding-top: 52px !important;
   }
 
   .main-content.sidebar-collapsed {
@@ -16381,3 +16358,789 @@ html[data-theme="dark"] {
     border-color: rgba(234, 88, 12, 0.4) !important;
   }
 }
+
+/* =========================================================
+   SKILL POINT — AUTOMATIC MOBILE RESPONSIVE SYSTEM
+   Strictly scoped to <= 900px, <= 768px, <= 640px, and <= 480px.
+   Desktop viewports (1024px, 1280px, 1366px, 1440px+) remain
+   100% pixel-for-pixel unchanged and untouched.
+========================================================= */
+
+/* --- 1. Mobile Header, Navigation Drawer & Safe Spacing (max-width: 900px) --- */
+@media (max-width: 900px) {
+  /* Prevent background scrolling when mobile drawer is open */
+  body.mobile-drawer-open {
+    overflow: hidden !important;
+  }
+
+  /* Compact Mobile App Bar — fixed to top, always accessible from any scroll position */
+  .mobile-app-bar {
+    display: flex !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 52px !important;
+    height: calc(52px + env(safe-area-inset-top, 0px)) !important;
+    padding-top: env(safe-area-inset-top, 0px) !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    background: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    z-index: 950 !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+  }
+
+  .mobile-menu-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    width: 44px !important;
+    height: 44px !important;
+    border: 1px solid #e2e8f0 !important;
+    background: #f8fafc !important;
+    border-radius: 8px !important;
+    color: #1e293b !important;
+    cursor: pointer !important;
+    flex-shrink: 0 !important;
+  }
+
+  .mobile-brand-title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+  }
+
+  .mobile-logo-mark {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 6px !important;
+    background: #ea580c !important;
+    color: #ffffff !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+  }
+
+  .mobile-target-pill {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    background: #fff7ed !important;
+    color: #c2410c !important;
+    padding: 3px 8px !important;
+    border-radius: 6px !important;
+    border: 1px solid #fed7aa !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 130px !important;
+  }
+
+  /* Main content offset: matches EXACTLY header height with ZERO excessive space */
+  .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding-top: calc(52px + env(safe-area-inset-top, 0px)) !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: max(20px, env(safe-area-inset-bottom, 20px)) !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+    min-height: auto !important;
+  }
+
+  .main-content.sidebar-collapsed {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Page-level padding: compact and immediate (no blank gap) */
+  .dashboard-page,
+  .job-page,
+  .resume-page,
+  .assessment-page,
+  .assignments-page,
+  .learning-page,
+  .progress-page,
+  .readiness-page,
+  .profile-page,
+  .skill-gap-page,
+  .settings-page,
+  .jd-page {
+    padding: 14px 14px 36px !important;
+    min-height: auto !important;
+  }
+
+  .page-header,
+  .dashboard-header {
+    margin-bottom: 10px !important;
+    padding-bottom: 0 !important;
+  }
+
+  .page-header h1,
+  .dashboard-header h1 {
+    font-size: 20px !important;
+    line-height: 1.25 !important;
+    margin: 0 !important;
+  }
+
+  .page-header p,
+  .dashboard-header p,
+  .page-header .eyebrow,
+  .dashboard-header .eyebrow {
+    display: none !important;
+  }
+
+  /* Fixed Mobile Drawer — anchored to viewport regardless of page scroll position */
+  .sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 280px !important;
+    max-width: 85vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 1000 !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 16px 14px !important;
+    padding-top: max(16px, env(safe-area-inset-top, 16px)) !important;
+    padding-bottom: max(20px, env(safe-area-inset-bottom, 20px)) !important;
+    background: #ffffff !important;
+    border-right: 1px solid #e2e8f0 !important;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.18) !important;
+    box-sizing: border-box !important;
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0) !important;
+  }
+
+  /* Always show full readable labels and details in mobile drawer */
+  .sidebar .logo-text {
+    display: block !important;
+  }
+
+  .sidebar .nav-label {
+    display: inline !important;
+    white-space: nowrap !important;
+  }
+
+  .sidebar .nav-section {
+    display: block !important;
+    margin: 12px 8px 6px !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em !important;
+    color: #64748b !important;
+  }
+
+  .sidebar .sidebar-bottom {
+    display: flex !important;
+    flex-direction: column !important;
+    padding-top: 12px !important;
+  }
+
+  .sidebar .user-mini-info {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .sidebar .system-status {
+    display: flex !important;
+  }
+
+  /* Accessible touch navigation rows */
+  .sidebar .nav-item {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    padding: 10px 12px !important;
+    min-height: 44px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    border-radius: 8px !important;
+  }
+
+  .sidebar .nav-item.active {
+    background: #fff7ed !important;
+    color: #ea580c !important;
+    font-weight: 600 !important;
+    border-left: 3px solid #ea580c !important;
+  }
+
+  /* Fixed Backdrop */
+  .sidebar-backdrop {
+    display: none !important;
+  }
+
+  .sidebar-backdrop.active {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(15, 23, 42, 0.5) !important;
+    backdrop-filter: blur(2px) !important;
+    -webkit-backdrop-filter: blur(2px) !important;
+    z-index: 999 !important;
+  }
+}
+
+/* --- 2. Mobile Dashboard Simplification & Hierarchy (max-width: 768px) --- */
+@media (max-width: 768px) {
+  .dashboard-page {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .dashboard-header {
+    order: 1 !important;
+  }
+
+  .dashboard-header .header-actions {
+    display: none !important;
+  }
+
+  .dashboard-page .target-role-bar {
+    order: 2 !important;
+    padding: 10px 12px !important;
+    margin-bottom: 12px !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  .target-role-meta {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+
+  /* Compact 2x2 stats grid instead of 4 giant stacked cards */
+  .dashboard-page .stats-grid {
+    order: 3 !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .dashboard-page .stats-card {
+    padding: 10px 12px !important;
+    gap: 2px !important;
+    border-radius: 8px !important;
+    min-height: auto !important;
+  }
+
+  .dashboard-page .stats-card .stats-label {
+    font-size: 10px !important;
+  }
+
+  .dashboard-page .stats-card .stats-value {
+    font-size: 20px !important;
+    margin: 1px 0 !important;
+  }
+
+  .dashboard-page .stats-card .stats-description {
+    font-size: 10px !important;
+    line-height: 1.25 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  /* Readiness card comes immediately after stats */
+  .dashboard-main-grid {
+    order: 4 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .dashboard-page .readiness-card {
+    padding: 16px 14px !important;
+    border-radius: 10px !important;
+  }
+
+  /* Development plan progress summary */
+  .dashboard-lower-grid {
+    order: 5 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    margin-top: 0 !important;
+    margin-bottom: 12px !important;
+  }
+
+  /* Competency matrix panel below */
+  .combined-skills-panel {
+    order: 6 !important;
+    padding: 16px 14px !important;
+    border-radius: 10px !important;
+  }
+
+  .combined-skills-table-header {
+    display: none !important;
+  }
+
+  .combined-skill-row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 6px !important;
+    padding: 10px !important;
+  }
+
+  .combined-skills-list {
+    max-height: 340px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Readiness Page Layout */
+  .readiness-hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .readiness-score-section {
+    flex-direction: column !important;
+    text-align: center !important;
+    align-items: center !important;
+  }
+
+  .readiness-score-info {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  .readiness-radar-container {
+    border-left: none !important;
+    border-top: 1px solid #f1f5f9 !important;
+    padding-left: 0 !important;
+    padding-top: 18px !important;
+    width: 100% !important;
+  }
+
+  /* Skill Gap Table to Card Layout */
+  .skill-table-header {
+    display: none !important;
+  }
+
+  .skill-row-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+
+  /* History table horizontal scrolling container */
+  .history-table-container {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+  }
+
+  .history-table-header,
+  .history-row {
+    min-width: 520px !important;
+  }
+
+  /* 2-column layouts stack */
+  .readiness-two-column,
+  .two-column-layout,
+  .learning-two-column,
+  .assignments-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Auth pages mobile presentation */
+  .sp-auth-page {
+    padding: 16px 12px !important;
+    min-height: 100vh !important;
+    align-items: flex-start !important;
+    background: #ffffff !important;
+  }
+
+  .sp-auth-card {
+    min-height: auto !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+    flex-direction: column !important;
+  }
+
+  .sp-auth-panel {
+    display: none !important;
+  }
+
+  .sp-auth-form-container {
+    width: 100% !important;
+    padding: 16px 0 !important;
+  }
+
+  /* =========================================================
+     REMOVE UNNECESSARY TEXT UNDER HEADINGS ON MOBILE (<768px)
+     ========================================================= */
+
+  /* Decorative Eyebrow Tags across all sections and cards */
+  .card-header .eyebrow,
+  .panel-header .eyebrow,
+  .section-heading .eyebrow,
+  .readiness-section-header .eyebrow,
+  .progress-section-header .eyebrow,
+  .learning-section-header .eyebrow,
+  .history-header-left .assessment-engine-tag,
+  .job-requirements-eyebrow,
+  .landing-framework-eyebrow,
+  .job-card > .eyebrow,
+  .assessment-info-grid .eyebrow {
+    display: none !important;
+  }
+
+  /* Redundant Subtitles & Explanatory Paragraphs under Section/Card Headings */
+  .panel-subtitle,
+  .card-meta-subtitle,
+  .job-requirements-subtitle,
+  .popout-skills-subtitle,
+  .career-goal-helper,
+  .jd-reader-subtitle,
+  .skill-status-helper,
+  .delta-analysis-helper,
+  .modal-subtitle,
+  .settings-card-header-left p,
+  .sp-auth-subtitle,
+  .stats-card-desc {
+    display: none !important;
+  }
+
+  /* Landing Page Hero Subtitle & Section Subtitles */
+  .landing-hero p,
+  .landing-section-subtitle,
+  .landing-cta-desc {
+    display: none !important;
+  }
+
+  /* Job Description Intelligence: Remove Test Samples on Mobile */
+  .jd-test-samples,
+  .jd-empty-samples {
+    display: none !important;
+  }
+
+  /* Target Job: Arrange action buttons in the same shape on mobile */
+  .job-header-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    gap: 8px !important;
+    margin-top: 6px !important;
+  }
+
+  .target-job-btn-group {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .target-job-header-btn {
+    width: 100% !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    max-height: 44px !important;
+    padding: 0 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+    background: #ea580c !important;
+    color: #ffffff !important;
+    border: 1px solid #ea580c !important;
+    box-shadow: 0 1px 2px rgba(234, 88, 12, 0.15) !important;
+  }
+
+  .target-job-header-btn span {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    white-space: nowrap !important;
+  }
+
+  .target-job-header-btn svg {
+    flex-shrink: 0 !important;
+    stroke: #ffffff !important;
+  }
+
+  .job-header-actions .target-status {
+    align-self: flex-start !important;
+    margin: 0 !important;
+  }
+
+  /* Resume: JD Module Button compact arrow-only on mobile */
+  .jd-matcher-card .card-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+  }
+
+  .jd-matcher-card .card-header h2 {
+    font-size: 15px !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
+    flex: 1 1 auto !important;
+  }
+
+  .jd-open-module-btn {
+    width: 38px !important;
+    min-width: 38px !important;
+    max-width: 38px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    flex-shrink: 0 !important;
+  }
+
+  .jd-open-module-btn .jd-btn-text {
+    display: none !important;
+  }
+
+  .jd-open-module-btn .jd-btn-arrow {
+    display: inline-block !important;
+    line-height: 1 !important;
+    font-size: 18px !important;
+  }
+
+  /* Target Job: Feedback toast banner - horizontal matter & centered button */
+  .job-target-toast {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 16px !important;
+    gap: 14px !important;
+  }
+
+  .job-target-toast .toast-left {
+    width: 100% !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  .job-target-toast .toast-left > div {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+  }
+
+  .job-target-toast strong {
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+    margin-bottom: 4px !important;
+    word-break: normal !important;
+  }
+
+  .job-target-toast span {
+    font-size: 12px !important;
+    line-height: 1.45 !important;
+  }
+
+  .job-target-toast .primary-button {
+    align-self: center !important;
+    margin: 2px auto 0 !important;
+    width: auto !important;
+    min-width: 180px !important;
+    padding: 10px 22px !important;
+    font-size: 13px !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+
+  /* Dashboard: Remove Biggest Deficit and Assessments cards on mobile */
+  .stat-biggest-deficit,
+  .stat-assessments,
+  .dashboard-page .stats-grid > div:nth-child(3),
+  .dashboard-page .stats-grid > div:nth-child(4) {
+    display: none !important;
+  }
+
+  /* Dashboard: Rearrange remaining 2 cards (Job Readiness & Skill Coverage) */
+  .dashboard-page .stats-grid {
+    order: 3 !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    margin-bottom: 12px !important;
+    width: 100% !important;
+  }
+
+  .dashboard-page .stats-card {
+    padding: 14px 14px !important;
+    gap: 6px !important;
+    border-radius: 10px !important;
+    min-height: 84px !important;
+    box-sizing: border-box !important;
+  }
+
+  .dashboard-page .stats-card-label {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+  }
+
+  .dashboard-page .stats-card-value {
+    font-size: 26px !important;
+    font-weight: 800 !important;
+    line-height: 1.1 !important;
+    margin: 2px 0 0 !important;
+  }
+}
+
+/* --- 3. Small Tablets & Phones (max-width: 640px) --- */
+@media (max-width: 640px) {
+  /* Prevent iOS Safari form zoom */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="number"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Current target card */
+  .current-target-card {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+
+  /* Readiness skill row */
+  .readiness-skill-row {
+    grid-template-columns: 1fr auto !important;
+    row-gap: 6px !important;
+  }
+
+  .readiness-skill-row > div:nth-child(2) {
+    grid-column: 1 / -1 !important;
+  }
+
+  /* Filter buttons wrap */
+  .filter-tabs,
+  .job-filter-bar {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  /* Assessment option buttons */
+  .option-btn,
+  .assessment-option {
+    min-height: 48px !important;
+    padding: 12px 14px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /* Modals fit viewport */
+  .modal-box,
+  .popout-role-card,
+  .skill-modal-content,
+  .edit-modal-content {
+    max-width: calc(100vw - 24px) !important;
+    max-height: calc(100vh - 32px) !important;
+    width: 100% !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    margin: 0 auto !important;
+  }
+
+  .popout-role-overlay {
+    padding: 12px !important;
+    align-items: center !important;
+  }
+
+  .popout-role-header,
+  .popout-role-body,
+  .popout-role-footer {
+    padding: 14px 16px !important;
+  }
+
+  /* Resume metrics 1 column */
+  .resume-metrics {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Card padding */
+  .job-card,
+  .card,
+  .dashboard-panel,
+  .skill-analysis-card,
+  .recent-assessment-card,
+  .readiness-main-card {
+    padding: 14px 12px !important;
+  }
+
+  .landing-hero {
+    padding: 1.5rem 4% !important;
+    gap: 1.5rem !important;
+  }
+}
+
+/* --- 4. Very Small Phones (max-width: 480px down to 320px) --- */
+@media (max-width: 480px) {
+  html, body {
+    overflow-x: hidden !important;
+  }
+
+  h1, .page-header h1, .dashboard-header h1 {
+    font-size: clamp(1.2rem, 5vw, 1.5rem) !important;
+    line-height: 1.25 !important;
+    overflow-wrap: break-word !important;
+  }
+
+  h2 {
+    font-size: clamp(1.05rem, 4.2vw, 1.25rem) !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .assessment-start,
+  .modal-footer button,
+  .upload-button {
+    width: 100% !important;
+    min-height: 44px !important;
+  }
+}
+

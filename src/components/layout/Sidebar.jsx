@@ -137,6 +137,7 @@ function Sidebar({ collapsed = false, onToggleCollapse, mobileOpen = false, onCl
 
   const displayName = profile?.name || "Student";
   const avatarInitial = displayName.charAt(0).toUpperCase();
+  const showLabels = !collapsed || mobileOpen;
 
   // Escape key closes mobile drawer
   useEffect(() => {
@@ -184,7 +185,7 @@ function Sidebar({ collapsed = false, onToggleCollapse, mobileOpen = false, onCl
       <NavLink
         key={link.path}
         to={link.path}
-        title={collapsed ? link.name : undefined}
+        title={collapsed && !mobileOpen ? link.name : undefined}
         onClick={handleNavClick}
         className={({ isActive }) =>
           `nav-item ${isActive ? "active" : ""}`
@@ -193,7 +194,7 @@ function Sidebar({ collapsed = false, onToggleCollapse, mobileOpen = false, onCl
         <span className="nav-icon">
           <link.Icon />
         </span>
-        {!collapsed && <span className="nav-label">{link.name}</span>}
+        <span className="nav-label">{link.name}</span>
       </NavLink>
     ));
 
@@ -204,7 +205,7 @@ function Sidebar({ collapsed = false, onToggleCollapse, mobileOpen = false, onCl
         <div className="logo">
           <div className="logo-brand-wrap">
             <div className="logo-mark" style={{ background: "#ea580c", borderRadius: "6px" }}>SP</div>
-            {!collapsed && (
+            {showLabels && (
               <div className="logo-text">
                 <div className="logo-name">Skill Point</div>
                 <div className="logo-subtitle" style={{ color: "#ea580c", fontWeight: "600" }}>Career Readiness</div>
@@ -241,34 +242,34 @@ function Sidebar({ collapsed = false, onToggleCollapse, mobileOpen = false, onCl
 
         {/* NAVIGATION */}
         <nav className="sidebar-nav">
-          <div className="nav-section">{!collapsed ? "MAIN" : "•"}</div>
+          <div className="nav-section">{showLabels ? "MAIN" : "•"}</div>
           {renderLinks(mainLinks)}
 
-          <div className="nav-section">{!collapsed ? "JOB READINESS" : "•"}</div>
+          <div className="nav-section">{showLabels ? "JOB READINESS" : "•"}</div>
           {renderLinks(readinessLinks)}
 
-          <div className="nav-section">{!collapsed ? "DEVELOPMENT" : "•"}</div>
+          <div className="nav-section">{showLabels ? "DEVELOPMENT" : "•"}</div>
           {renderLinks(developmentLinks)}
 
-          <div className="nav-section">{!collapsed ? "SYSTEM" : "•"}</div>
+          <div className="nav-section">{showLabels ? "SYSTEM" : "•"}</div>
           {renderLinks(systemLinks)}
 
           <button
             className="nav-item logout-button"
             onClick={logout}
-            title={collapsed ? "Sign Out" : undefined}
+            title={collapsed && !mobileOpen ? "Sign Out" : undefined}
           >
             <span className="nav-icon">
               <Icons.SignOut />
             </span>
-            {!collapsed && <span className="nav-label">Sign Out</span>}
+            {showLabels && <span className="nav-label">Sign Out</span>}
           </button>
         </nav>
 
         {/* SIDEBAR BOTTOM */}
         <div className="sidebar-bottom">
           {/* SYSTEM STATUS */}
-          {!collapsed && (
+          {showLabels && (
             <div className="system-status">
               <span className="status-dot"></span>
               <div>
@@ -281,7 +282,7 @@ function Sidebar({ collapsed = false, onToggleCollapse, mobileOpen = false, onCl
           {/* USER MINI */}
           <div className="user-mini" title={displayName}>
             <div className="avatar" style={{ background: "#ea580c", borderRadius: "6px" }}>{avatarInitial}</div>
-            {!collapsed && (
+            {showLabels && (
               <div className="user-mini-info">
                 <strong>{displayName}</strong>
                 <small>{profile?.branch ? `${profile.degree || 'B.Tech'} · ${profile.branch}` : (profile?.degree ? `${profile.degree} · Student` : "B.Tech · Student")}</small>

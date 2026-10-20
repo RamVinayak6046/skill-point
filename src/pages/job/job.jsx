@@ -492,35 +492,37 @@ function Job() {
             Choose your preparation target role. Your diagnostics, assessments, and learning paths adapt automatically.
           </p>
         </div>
-        <div className="page-header-actions">
-          <button
-            className="add-job-button"
-            onClick={() => navigate("/jd")}
-            style={{
-              borderColor: "#ea580c",
-              color: "#ffffff",
-              background: "#ea580c",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "6px",
-            }}
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-            </svg>
-            Extract from JD
-          </button>
-          <button
-            className="add-job-button"
-            onClick={() => setShowAddModal(true)}
-            style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            Add Custom Job
-          </button>
+        <div className="page-header-actions job-header-actions">
+          <div className="target-job-btn-group">
+            <button
+              className="add-job-button target-job-header-btn"
+              onClick={() => navigate("/jd")}
+              style={{
+                borderColor: "#ea580c",
+                color: "#ffffff",
+                background: "#ea580c",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+              </svg>
+              <span>Extract from JD</span>
+            </button>
+            <button
+              className="add-job-button target-job-header-btn"
+              onClick={() => setShowAddModal(true)}
+              style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              <span>Add Custom Job</span>
+            </button>
+          </div>
           <div className="target-status" style={{ color: targetJob ? '#15803d' : '#ea580c', borderColor: targetJob ? '#bbf7d0' : '#fed7aa', background: targetJob ? '#f0fdf4' : '#fff7ed' }}>
             <span style={{ background: targetJob ? '#15803d' : '#ea580c' }}></span>
             {targetJob ? 'TARGET ACTIVE' : 'NO TARGET SELECTED'}
@@ -598,7 +600,7 @@ function Job() {
             <div>
               <span className="eyebrow" style={{ color: "#c2410c" }}>CAREER GOAL</span>
               <h3 style={{ margin: "2px 0 0", fontSize: "16px", color: "#0f172a", fontWeight: "700" }}>No Target Role Selected</h3>
-              <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#64748b" }}>
+              <p className="career-goal-helper" style={{ margin: "2px 0 0", fontSize: "13px", color: "#64748b" }}>
                 Select a target career role from the list below to calibrate your skills, diagnostic assessments, and learning roadmap.
               </p>
             </div>

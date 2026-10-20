@@ -914,7 +914,7 @@ Core Competencies: ${activeJD.competencies?.map((c) => c.name).join(", ") || "No
           </div>
 
           {/* Quick sample buttons for 1-click testing */}
-          <div style={{ display: "flex", gap: "6px", alignItems: "center", flexWrap: "wrap" }}>
+          <div className="jd-test-samples" style={{ display: "flex", gap: "6px", alignItems: "center", flexWrap: "wrap" }}>
             <span style={{ fontSize: "11px", color: "#8a7966", fontWeight: "600", marginRight: "4px" }}>
               Test Samples:
             </span>
@@ -1812,7 +1812,7 @@ Core Competencies: ${activeJD.competencies?.map((c) => c.name).join(", ") || "No
           <p style={{ fontSize: "13px", color: "#8a7966", maxWidth: "520px", margin: "0 auto 20px", lineHeight: "1.6" }}>
             Paste text or upload a job posting file above, or test with one of our realistic sample JDs to extract structured technical requirements.
           </p>
-          <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+          <div className="jd-empty-samples" style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
             <button
               type="button"
               className="primary-button"

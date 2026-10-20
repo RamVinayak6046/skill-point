@@ -1091,18 +1091,21 @@ function Resume() {
           <div>
             <span className="eyebrow" style={{ color: "#ea580c" }}>TARGET COMPANY &amp; SPECIFIC JOB POSTING</span>
             <h2>Job Description (JD) Reader &amp; ATS Match Prediction</h2>
-            <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#64748b" }}>
+            <p className="jd-reader-subtitle" style={{ margin: "4px 0 0", fontSize: "13px", color: "#64748b" }}>
               Paste the actual job description from LinkedIn, Naukri, or company careers page to test your resume alignment.
             </p>
           </div>
           <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
             <button
               type="button"
-              className="primary-button"
+              className="primary-button jd-open-module-btn"
               onClick={() => navigate("/jd")}
               style={{ fontSize: "12px", padding: "8px 14px", background: "#ea580c" }}
+              aria-label="Open Full JD Intelligence Module"
+              title="Open Full JD Intelligence Module"
             >
-              Open Full JD Intelligence Module →
+              <span className="jd-btn-text">Open Full JD Intelligence Module </span>
+              <span className="jd-btn-arrow">→</span>
             </button>
             {activeJD && (
               <button

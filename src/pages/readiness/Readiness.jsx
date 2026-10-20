@@ -174,7 +174,7 @@ function Readiness() {
         <>
       {/* MAIN SCORE & RADAR HERO */}
       <section className="job-card readiness-main-card" style={{ padding: "28px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "28px", alignItems: "center" }}>
+        <div className="readiness-hero-grid" style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "28px", alignItems: "center" }}>
           <div className="readiness-score-section" style={{ alignItems: "center", gap: "28px" }}>
             <CircularGauge
               value={overall}
@@ -275,7 +275,7 @@ function Readiness() {
           </div>
 
           {/* High-tech Competency Polygon Radar */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", borderLeft: "1px solid #f1f5f9", paddingLeft: "24px" }}>
+          <div className="readiness-radar-container" style={{ display: "flex", flexDirection: "column", alignItems: "center", borderLeft: "1px solid #f1f5f9", paddingLeft: "24px" }}>
             <span style={{ fontSize: "10px", fontWeight: "700", color: "#64748b", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>
               DIAGNOSTIC RADAR
             </span>

@@ -29,6 +29,8 @@ dist-ssr
 .dev.vars.*
 
 # Environment & Local Overrides
+.env
+.env.*
 .env.local
 .env.*.local
 *.local
