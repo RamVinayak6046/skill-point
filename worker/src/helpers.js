@@ -218,9 +218,17 @@ export function validateAndCleanQuestions(rawQuestions, requestedLevel, requeste
       continue; // Invalid answer index
     }
 
+    // Shuffle options so correct answer position is varied (A, B, C, D)
+    const correctOptionText = options[answerIndex];
+    for (let j = options.length - 1; j > 0; j--) {
+      const k = Math.floor(Math.random() * (j + 1));
+      [options[j], options[k]] = [options[k], options[j]];
+    }
+    const finalAnswerIndex = options.indexOf(correctOptionText);
+
     const explanation = typeof q.explanation === 'string' && q.explanation.trim().length > 10
       ? q.explanation.trim()
-      : `Option ${String.fromCharCode(65 + answerIndex)} is the correct engineering practice.`;
+      : `Option ${String.fromCharCode(65 + finalAnswerIndex)} is the correct engineering practice.`;
 
     const skill = typeof q.skill === 'string' && q.skill.trim().length > 0
       ? q.skill.trim()
@@ -233,7 +241,7 @@ export function validateAndCleanQuestions(rawQuestions, requestedLevel, requeste
       level: validLevel,
       question: questionText,
       options,
-      answer: answerIndex,
+      answer: finalAnswerIndex >= 0 ? finalAnswerIndex : 0,
       explanation,
       objective: typeof q.objective === 'string' ? q.objective.trim() : `${skill} competency evaluation`,
       source: 'workers_ai_llm',
@@ -271,7 +279,7 @@ ${companyContext ? `Role Context: ${companyContext}.` : ''}
 RULES:
 1. Every question must be technically precise, realistic, and test genuine understanding.
 2. Provide exactly 4 distinct and plausible options per question.
-3. The answer must be the 0-indexed number (0, 1, 2, or 3) indicating which option is correct.
+3. The answer must be the 0-indexed number (0, 1, 2, or 3) indicating which option is correct. Distribute the correct answers across 0, 1, 2, and 3 (Option A, B, C, D) so it is NOT always 0.
 4. Provide a clear technical explanation.
 5. Return ONLY a valid JSON array of objects. No markdown formatting, no conversational text, no backticks.
 
