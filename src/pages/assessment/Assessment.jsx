@@ -16,28 +16,28 @@ const LEVEL_DEFINITIONS = [
     level: 1,
     title: "Fundamentals & Core Syntax",
     difficulty: "Beginner • Entry",
-    description: "Evaluates language syntax, primitives, control structures, and fundamental definitions. Comprehensive breadth across all skills (15+ questions).",
-    time: "20 mins",
-    minQuestions: 15,
-    tag: "Level 1 • 15+ Qs",
+    description: "Evaluates language syntax, primitives, control structures, and fundamental definitions. Comprehensive breadth across all skills (25–30 questions).",
+    time: "25 mins",
+    minQuestions: 25,
+    tag: "Level 1 • 25–30 Qs",
   },
   {
     level: 2,
     title: "Core Engineering & Architecture",
     difficulty: "Intermediate • Benchmark",
-    description: "Evaluates API design, error handling, component lifecycle, transactions, and system architecture (10+ questions).",
-    time: "15 mins",
-    minQuestions: 10,
-    tag: "Level 2 • 10+ Qs",
+    description: "Evaluates API design, error handling, component lifecycle, transactions, and system architecture (20–25 questions).",
+    time: "20 mins",
+    minQuestions: 20,
+    tag: "Level 2 • 20–25 Qs",
   },
   {
     level: 3,
     title: "1-to-1 Technical Interview & Production Scenarios",
     difficulty: "Advanced • Staff / Principal Interview",
-    description: "Simulates an intense 1-to-1 Principal Architect interview. Tests deep concurrency race conditions, memory profiling, latency bottlenecks, and real production incidents (5+ questions).",
+    description: "Simulates an intense 1-to-1 Principal Architect interview. Tests deep concurrency race conditions, memory profiling, latency bottlenecks, and real production incidents (10–15 questions).",
     time: "15 mins",
-    minQuestions: 5,
-    tag: "Level 3 • 5+ Qs (Interview)",
+    minQuestions: 10,
+    tag: "Level 3 • 10–15 Qs (Interview)",
   },
 ];
 
@@ -461,7 +461,7 @@ function Assessment() {
                       <span className="active-level-banner-diff"> ({currentDef.difficulty})</span>
                     </div>
                     <span className="active-level-banner-meta">
-                      Min {currentDef.minQuestions} Qs (Adaptive) • {currentDef.time}
+                      {currentDef.level === 1 ? "25–30 Qs" : currentDef.level === 2 ? "20–25 Qs" : "10–15 Qs"} • {currentDef.time}
                     </span>
                   </div>
                   <p className="active-level-banner-desc">{currentDef.description}</p>
@@ -475,7 +475,7 @@ function Assessment() {
           <div className="assessment-details">
             <div>
               <span>QUESTIONS</span>
-              <strong>{previewPlan.targetCount} Adaptive (Min 10)</strong>
+              <strong>{previewPlan.targetCount} Adaptive ({currentSelectedLevel.level === 1 ? "25–30" : currentSelectedLevel.level === 2 ? "20–25" : "10–15"})</strong>
             </div>
             <div>
               <span>ESTIMATED TIME</span>
@@ -499,8 +499,8 @@ function Assessment() {
             onClick={() => startAssessment(assessmentLevel || 1)}
           >
             {isGenerating
-              ? "Generating Questions via Cloudflare Workers AI..."
-              : `Start Level ${assessmentLevel || 1} Assessment (${previewPlan.targetCount} Questions) →`}
+              ? "Generating Questions..."
+              : `Start Level ${assessmentLevel || 1}`}
           </button>
         </section>
 

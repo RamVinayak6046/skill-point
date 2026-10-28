@@ -9,7 +9,7 @@ export const FALLBACK_MODEL = '@cf/meta/llama-3.2-3b-instruct';
 // Configurable bounds
 export const MAX_REQUEST_BODY_BYTES = 64 * 1024; // 64 KB limit
 export const MIN_QUESTIONS = 1;
-export const MAX_QUESTIONS_PER_REQUEST = 20;
+export const MAX_QUESTIONS_PER_REQUEST = 30;
 
 // Rate limiting configuration
 export const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
@@ -262,9 +262,9 @@ export function validateAndCleanQuestions(rawQuestions, requestedLevel, requeste
  */
 export function buildPrompt({ targetJob, level, skills, questionCount, companyContext = '' }) {
   const levelDescriptions = {
-    1: 'Level 1 (Fundamentals & Syntax • 15+ Qs): Language primitives, core keywords, basic control flow, standard library methods, and definitions.',
-    2: 'Level 2 (Core Engineering & Architecture • 10+ Qs): Practical system design, architectural patterns, API contracts, error handling, component lifecycle, transactions, and state management.',
-    3: 'Level 3 (RIGOROUS 1-TO-1 SENIOR/STAFF TECHNICAL INTERVIEW • 5+ Qs): This is an elite live technical interview round with a Principal Architect. Questions MUST be complex, deep real-world production incident scenarios, subtle concurrency race conditions, memory profiling (heap dumps, GC pauses), deadlocks, distributed transaction failures, low-level internal JVM/runtime mechanics, and tricky architectural trade-offs where plausible distractors catch surface-level knowledge.',
+    1: 'Level 1 (Fundamentals & Syntax • 25–30 Qs): Language primitives, core keywords, basic control flow, standard library methods, and definitions.',
+    2: 'Level 2 (Core Engineering & Architecture • 20–25 Qs): Practical system design, architectural patterns, API contracts, error handling, component lifecycle, transactions, and state management.',
+    3: 'Level 3 (RIGOROUS 1-TO-1 SENIOR/STAFF TECHNICAL INTERVIEW • 10–15 Qs): This is an elite live technical interview round with a Principal Architect. Questions MUST be complex, deep real-world production incident scenarios, subtle concurrency race conditions, memory profiling (heap dumps, GC pauses), deadlocks, distributed transaction failures, low-level internal JVM/runtime mechanics, and tricky architectural trade-offs where plausible distractors catch surface-level knowledge.',
   };
 
   const levelGuide = levelDescriptions[level] || levelDescriptions[1];

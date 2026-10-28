@@ -1345,44 +1345,104 @@ export function calculateAdaptiveQuestionPlan({
     calculatedTotal += quota;
   });
 
-  // 6. Enforce Level-Based Minimum Question Floors:
-  // Level 1: 15+ questions (comprehensive fundamentals & syntax check)
-  // Level 2: 10+ questions (core engineering & architecture)
-  // Level 3: 5+ questions (deep 1-to-1 interview style production scenarios)
-  const LEVEL_FLOORS = { 1: 15, 2: 10, 3: 5 };
-  const MIN_FLOOR = LEVEL_FLOORS[level] || 10;
-  let finalTargetCount = Math.max(calculatedTotal, MIN_FLOOR);
+  // 6. Enforce Level-Based Question Bounds:
+  // Level 1: 25–30 questions (comprehensive fundamentals & syntax check)
+  // Level 2: 20–25 questions (core engineering & architecture)
+  // Level 3: 10–15 questions (deep 1-to-1 interview style production scenarios)
+  const LEVEL_BOUNDS = {
+    1: { min: 25, max: 30 },
+    2: { min: 20, max: 25 },
+    3: { min: 10, max: 15 },
+  };
+  const bounds = LEVEL_BOUNDS[level] || { min: 20, max: 25 };
+  const MIN_FLOOR = bounds.min;
+  const MAX_CEILING = bounds.max;
 
-  if (calculatedTotal < MIN_FLOOR) {
+  // If calculatedTotal exceeds the maximum ceiling, trim excess questions
+  // Priority: keep high-impact/missing/partial skills, trim matched/low-importance first
+  if (calculatedTotal > MAX_CEILING) {
+    let excess = calculatedTotal - MAX_CEILING;
+
+    // Helper to reduce quota on matching items
+    const reduceQuotas = (predicate, targetMin) => {
+      for (const item of allocations) {
+        if (excess <= 0) break;
+        if (predicate(item) && item.quota > targetMin) {
+          const delta = Math.min(excess, item.quota - targetMin);
+          item.quota -= delta;
+          excess -= delta;
+          item.reason += ` (quota calibrated to meet Level ${level} max cap of ${MAX_CEILING} questions)`;
+        }
+      }
+    };
+
+    // Pass 1: Reduce matched skills with quota > 1 down to 1
+    reduceQuotas((a) => a.classification === "Satisfied" || a.classification === "Matched", 1);
+    // Pass 2: Reduce partial skills with quota > 2 down to 2
+    reduceQuotas((a) => a.classification === "Partially Matched", 2);
+    // Pass 3: Reduce missing skills with quota > 2 down to 2
+    reduceQuotas((a) => a.classification === "Missing", 2);
+    // Pass 4: Reduce partial skills down to 1
+    reduceQuotas((a) => a.classification === "Partially Matched", 1);
+    // Pass 5: Reduce missing skills down to 1
+    reduceQuotas((a) => a.classification === "Missing", 1);
+    // Pass 6: If candidate has more total skills than MAX_CEILING, reduce lowest priority skills down to 0
+    if (excess > 0) {
+      const trimOrder = [...allocations].sort((a, b) => {
+        const getPriorityWeight = (x) => {
+          if (x.classification === "Missing" && (x.importance === "High" || x.source === "Required")) return 5;
+          if (x.classification === "Missing") return 4;
+          if (x.classification === "Partially Matched" && (x.importance === "High" || x.source === "Required")) return 3;
+          if (x.classification === "Partially Matched") return 2;
+          return 1;
+        };
+        return getPriorityWeight(a) - getPriorityWeight(b);
+      });
+
+      for (const item of trimOrder) {
+        if (excess <= 0) break;
+        if (item.quota > 0) {
+          const delta = Math.min(excess, item.quota);
+          item.quota -= delta;
+          excess -= delta;
+          item.reason = "De-prioritized for this session to respect level ceiling";
+        }
+      }
+    }
+  } else if (calculatedTotal < MIN_FLOOR) {
     let needed = MIN_FLOOR - calculatedTotal;
     // Sort allocations so weak and high importance skills get additional questions first
     const sortedAllocations = [...allocations].sort((a, b) => {
-      const aWeight = (a.classification === "Missing" ? 3 : a.classification === "Partially Matched" ? 2 : 1);
-      const bWeight = (b.classification === "Missing" ? 3 : b.classification === "Partially Matched" ? 2 : 1);
-      return bWeight - aWeight;
+      const getPriorityWeight = (x) => {
+        if (x.classification === "Missing" && (x.importance === "High" || x.source === "Required")) return 5;
+        if (x.classification === "Missing") return 4;
+        if (x.classification === "Partially Matched") return 3;
+        return 1;
+      };
+      return getPriorityWeight(b) - getPriorityWeight(a);
     });
 
     let idx = 0;
     while (needed > 0 && sortedAllocations.length > 0) {
       const target = sortedAllocations[idx % sortedAllocations.length];
       target.quota += 1;
-      target.reason += ` (quota expanded to satisfy Level ${level} minimum ${MIN_FLOOR} questions floor)`;
+      target.reason += ` (quota expanded to reach Level ${level} minimum ${MIN_FLOOR} questions)`;
       needed--;
       idx++;
     }
   }
 
-  // Recalculate sum of quotas after expansion
-  finalTargetCount = allocations.reduce((sum, a) => sum + a.quota, 0);
+  // Recalculate sum of quotas after calibration
+  let finalTargetCount = allocations.reduce((sum, a) => sum + a.quota, 0);
 
   // Difficulty title
   const levelNames = {
-    1: "Level 1: Fundamentals & Syntax (15+ Questions)",
-    2: "Level 2: Core Engineering & Architecture (10+ Questions)",
-    3: "Level 3: Technical Interview & Production Scenarios (5+ Questions)",
+    1: "Level 1: Fundamentals & Syntax (25–30 Questions)",
+    2: "Level 2: Core Engineering & Architecture (20–25 Questions)",
+    3: "Level 3: Technical Interview & Production Scenarios (10–15 Questions)",
   };
 
-  const rationale = `Adaptive Assessment: ${finalTargetCount} questions dynamically generated based on ${weakSkills.length} identified weak/partial skills and ${evaluatedSkills.length} total competencies (Level ${level} floor: ${MIN_FLOOR} questions).`;
+  const rationale = `Adaptive Assessment: ${finalTargetCount} questions dynamically generated based on ${weakSkills.length} identified weak/partial skills and ${evaluatedSkills.length} total competencies (Level ${level} target: ${MIN_FLOOR}–${MAX_CEILING} questions).`;
 
   return {
     level,
@@ -1397,6 +1457,7 @@ export function calculateAdaptiveQuestionPlan({
     },
     targetCount: finalTargetCount,
     minFloor: MIN_FLOOR,
+    maxCeiling: MAX_CEILING,
     allocations,
     skillsEvaluatedCount: evaluatedSkills.length,
     weakSkillsCount: weakSkills.length,
@@ -1458,10 +1519,15 @@ export function generateDynamicQuestions({
     skillLevels,
   });
 
-  // Use explicit override if provided (clamped to level floor), otherwise use adaptive target count
-  const LEVEL_FLOORS = { 1: 15, 2: 10, 3: 5 };
-  const levelFloor = LEVEL_FLOORS[selectedLevel] || 10;
-  const targetTotal = count !== null ? Math.max(levelFloor, parseInt(count, 10)) : adaptivePlan.targetCount;
+  // Use explicit override if provided (clamped strictly within level bounds), otherwise use adaptive target count
+  const LEVEL_BOUNDS = {
+    1: { min: 25, max: 30 },
+    2: { min: 20, max: 25 },
+    3: { min: 10, max: 15 },
+  };
+  const bounds = LEVEL_BOUNDS[selectedLevel] || { min: 20, max: 25 };
+  let targetTotal = count !== null ? parseInt(count, 10) : adaptivePlan.targetCount;
+  targetTotal = Math.max(bounds.min, Math.min(bounds.max, targetTotal));
 
   // 2. Build anti-repetition registry
   const previouslySeenHashes = new Set();
@@ -1534,13 +1600,20 @@ export function generateDynamicQuestions({
     }
   });
 
-  // 4. If we haven't reached targetTotal (or minimum 10), distribute remaining across skills
+  // 4. If we haven't reached targetTotal, distribute remaining across active skills
   let round = 0;
+  const activeSkillsList = adaptivePlan.allocations.filter((a) => a.quota > 0).map((a) => a.skill);
+  const fallbackList = activeSkillsList.length > 0 ? activeSkillsList : (skills.length > 0 ? skills : ["Core Fundamentals"]);
   while (selectedQuestions.length < targetTotal) {
-    const targetSkill = adaptivePlan.allocations[round % adaptivePlan.allocations.length]?.skill || skills[0] || "Java";
+    const targetSkill = fallbackList[round % fallbackList.length];
     const q = pickQuestionForSkill(targetSkill, selectedQuestions.length);
     selectedQuestions.push(q);
     round++;
+  }
+
+  // Ensure strict enforcement of bounds.max
+  if (selectedQuestions.length > bounds.max) {
+    selectedQuestions.splice(bounds.max);
   }
 
   // 5. Shuffle overall question order so questions from the same skill aren't all bunched together
@@ -1576,7 +1649,8 @@ export function generateDynamicQuestions({
     levelName: adaptivePlan.levelName,
     generatedAt: new Date().toISOString(),
     totalQuestions: finalizedQuestions.length,
-    minQuestionsRequired: levelFloor,
+    minQuestionsRequired: bounds.min,
+    maxQuestionsAllowed: bounds.max,
     adaptivePlan,
     questions: finalizedQuestions,
     source: "local_procedural_generator",
@@ -1776,7 +1850,7 @@ export async function fetchLLMGeneratedMCQs({
     targetJob: (targetJob || "Software Engineer").slice(0, 80),
     level: Math.max(1, Math.min(3, parseInt(level, 10) || 1)),
     skills: skills.map((s) => String(s || "").trim().slice(0, 40)).filter(Boolean).slice(0, 10),
-    questionCount: Math.min(20, Math.max(1, parseInt(questionCount, 10) || 10)),
+    questionCount: Math.min(30, Math.max(1, parseInt(questionCount, 10) || 10)),
     companyContext: (companyContext || "").slice(0, 100),
   };
 
@@ -1950,11 +2024,18 @@ export async function generateAssessmentQuestionsAsync(params = {}) {
     workerBaseUrl,
   });
 
-  const LEVEL_FLOORS = { 1: 15, 2: 10, 3: 5 };
-  const minRequiredForLevel = LEVEL_FLOORS[selectedLevel] || 10;
+  const LEVEL_BOUNDS = {
+    1: { min: 25, max: 30 },
+    2: { min: 20, max: 25 },
+    3: { min: 10, max: 15 },
+  };
+  const bounds = LEVEL_BOUNDS[selectedLevel] || { min: 20, max: 25 };
+  const minRequiredForLevel = bounds.min;
+  const maxAllowedForLevel = bounds.max;
 
   if (llmResult.success && Array.isArray(llmResult.questions) && llmResult.questions.length >= minRequiredForLevel && llmResult.attemptId) {
-    // Successfully received valid questions from Workers AI
+    // Successfully received valid questions from Workers AI, strictly clamp to maxAllowedForLevel
+    const boundedQuestions = llmResult.questions.slice(0, maxAllowedForLevel);
     return {
       sessionId: `assessment-llm-${Date.now()}`,
       attemptId: llmResult.attemptId,
@@ -1964,10 +2045,11 @@ export async function generateAssessmentQuestionsAsync(params = {}) {
       level: selectedLevel,
       levelName: adaptivePlan.levelName,
       generatedAt: new Date().toISOString(),
-      totalQuestions: llmResult.questions.length,
+      totalQuestions: boundedQuestions.length,
       minQuestionsRequired: minRequiredForLevel,
+      maxQuestionsAllowed: maxAllowedForLevel,
       adaptivePlan,
-      questions: llmResult.questions,
+      questions: boundedQuestions,
       source: "workers_ai_llm",
       model: llmResult.model,
     };

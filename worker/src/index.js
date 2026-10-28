@@ -521,7 +521,7 @@ export default {
               { role: 'user', content: prompt },
             ],
             temperature: 0.3,
-            max_tokens: 2048,
+            max_tokens: 4096,
           });
         } catch (primaryErr) {
           const isPrimaryTimeout = primaryErr?.name === 'TimeoutError' || primaryErr?.message?.toLowerCase().includes('timeout');
@@ -540,7 +540,7 @@ export default {
               { role: 'user', content: prompt },
             ],
             temperature: 0.3,
-            max_tokens: 2048,
+            max_tokens: 4096,
           });
         }
 
